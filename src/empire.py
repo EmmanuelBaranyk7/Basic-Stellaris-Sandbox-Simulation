@@ -62,9 +62,10 @@ class Empire():
             self.preform_war()
         self.inc_tech_level()
         self.rebuild_fleet()
-        if not self.is_vassel:
+        if not self.is_vassal:
             for neighbor in self.neighbors:
                 self.attempt_vassalization(neighbor)
+                self.propose_war(neighbor)
                                 
 
     def preform_war(self):
@@ -86,11 +87,13 @@ class Empire():
                             else:
                                 neighbor.sovereign.fleet_power -= 3
                                 self.fleet_power -= 3
+                        neighbor.rescore()
         if self.is_overlord:
             for vassel in self.vassals:
                 bonus += vassel.fleet_power // vassel.system_count
         self.military_power = (self.fleet_power // self.system_count) + bonus
         self.rescore()
+
 
     def attempt_vassalization(self, neighbor):
         if neighbor.score < self.score // 2:
@@ -115,6 +118,7 @@ class Empire():
         self.neighbors.remove(neighbor)
         self.neighbors.extend(neighbor.neighbors)
         self.vassals.append(neighbor)
+        #self.display_actions
 
     def inc_tech_level(self):
         self.tech_level += 1
@@ -130,6 +134,8 @@ class Empire():
                 bonus += vassal.system_count + vassal.economy + vassal.military_power 
         self.military_power = self.fleet_power // self.system_count
         self.score = self.system_count + self.economy + (self.tech_level * 5) + self.military_power + bonus
+        if self.system_count <= 0:
+            self.display_actions(dead=True)
 
     def rebuild_fleet(self):
         if self.fleet_power < self.fleet_cap:
@@ -143,10 +149,21 @@ class Empire():
             self.name = random.choice(empire_names)  
             empire_names.remove(self.name)  
 
+    def propose_war(self, neighbor):
+        chance = random.randint(1, 100)
+        if chance <= 10:
+            self.is_at_war = True
+            neighbor.is_at_war = True
+            self.rivals.append(neighbor)
+            neighbor.rivals.append(self)
+
+    def display_actions(self, dwar=None, nvassal=None, dead=None):
+        if dwar is not None:
+            print(f"{self.name} has declared war on {dwar.name}!")
+        if nvassal is not None:
+            print(f"{nvassal.name} has been vassalized by {self.name}!")
+        if dead is not None:
+            print(f"{self} has been vanqiested!")
 
 
-    def update_military_power(self): #update score?
-        #self.military_power
-        pass
-        
         

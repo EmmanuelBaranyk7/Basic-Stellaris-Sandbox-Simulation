@@ -15,17 +15,20 @@ class Sandbox():
         self.empire_names =[]
 
     def build_sandbox(self):
-            self.create_system_names_list()
-            self.create_empire_names_list()
-            #ask about default settings
-            #set_num_AI_empires()
-            #set_num_fallen_empires()
-            self.set_galaxy_size()
-            self.set_num_empires()
-            self.set_game_end_year()
-            self.set_contigency_start_year()
-            #build_custom_empire()
-            #update_sandbox
+        self.create_system_names_list()
+        self.create_empire_names_list()
+        #ask about default settings
+        #set_num_AI_empires()
+        #set_num_fallen_empires()
+        self.set_galaxy_size()
+        self.set_num_empires()
+        self.set_game_end_year()
+        self.set_contigency_start_year()
+        #build_custom_empire()
+    
+    def run_sandbox(self):
+        for year in self.end_year:
+            self.update_sandbox
 
     def create_galaxy(self, size):
         for i in range(size):
@@ -107,8 +110,7 @@ class Sandbox():
     def update_sandbox(self):
         for empire in self.empires:
             empire.preform_actions()
-            pass
-        #empire.display_actions()
+            empire.display_actions()
         random.shuffle(self.empires) #scramble empires in empires list for "fairness"
         self.current_year += 1
             

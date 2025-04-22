@@ -54,6 +54,17 @@ class TestBuild(unittest.TestCase):
         self.assertEqual(sandbox.s_names[23], "Maveros")
         self.assertEqual(sandbox.s_names[71], "Jornath Prime")
 
+    def test_update_sandbox(self):
+        sandbox = Sandbox()
+        sandbox.end_year = 50
+        sandbox.create_system_names_list()
+        sandbox.create_empire_names_list()
+        sandbox.create_galaxy(20)
+        sandbox.colonize_empires(5)
+        while sandbox.current_year < sandbox.end_year:
+            sandbox.update_sandbox() #if any of the OTHER funcs are good, this should be good
+
+
     
 
             
