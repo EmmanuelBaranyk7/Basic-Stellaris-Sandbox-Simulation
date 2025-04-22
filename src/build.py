@@ -1,17 +1,22 @@
 import random
+import csv
 from empire import Empire
+from empiretype import EmpireType, create_new_empire
 from system import System
 
-
 class Sandbox():
-    def __inti__(self):
-        end_year = 0
-        contigency_start_year = 0
-        current_year = 0
-        galaxy = []
-        empires = [] #unorder them after each update?
+    def __init__(self):
+        self.end_year = 0
+        self.contigency_start_year = 0
+        self.current_year = 0
+        self.galaxy = []
+        self.empires = [] 
+        self.s_names = []
+        self.empire_names =[]
 
     def build_sandbox(self):
+            self.create_system_names_list()
+            self.create_empire_names_list()
             #ask about default settings
             #set_num_AI_empires()
             #set_num_fallen_empires()
@@ -25,17 +30,21 @@ class Sandbox():
     def create_galaxy(self, size):
         for i in range(size):
             System().add_system(self.galaxy)
+            self.galaxy[-1].add_name(self.s_names)
             for sys in self.galaxy:
                 if sys is not self.galaxy[i] and self.galaxy[i].border_count < self.galaxy[i].border_max and sys.border_count < sys.border_max:
                     self.galaxy[i].add_border(sys) 
+        if not self.galaxy[-1].has_border:
+            self.galaxy[-1].add_border(self.galaxy[-2]) # rare case there is a borderless system left over
 
 
     def colonize_empires(self, num):
         for i in range(num):
             while True:
-                index = random.randint(0, len(galaxy)-1)
-                if not self.galaxy[index].soverign and self.galaxy[index].has_borders:
-                    e = Empire().create_new_empire()
+                index = random.randint(0, len(self.galaxy)-1)
+                if not self.galaxy[index].sovereign and self.galaxy[index].has_border:
+                    e = create_new_empire()
+                    e.add_name(self.empire_names)
                     e.add_system(self.galaxy[index])
                     self.empires.append(e)
                     break
@@ -81,12 +90,26 @@ class Sandbox():
                 print("Not a valid integer year. try again")
         self.contigency_start_year = year
 
+    def create_system_names_list(self):
+        filepath = "/home/eman1/workspace/github.com/EmmanuelBaranyk7/Basic-Stellaris-Sandbox-Simulation/planet_names.csv"
+        with open(filepath, newline='', encoding='utf-8') as csvf:
+            reader = csv.reader(csvf)
+            next(reader)  # Skip header
+            self.s_names = [row[0] for row in reader]
+
+    def create_empire_names_list(self):
+        filepath = "/home/eman1/workspace/github.com/EmmanuelBaranyk7/Basic-Stellaris-Sandbox-Simulation/empire_names.csv"
+        with open(filepath, newline='', encoding='utf-8') as csvf:
+            reader = csv.reader(csvf)
+            next(reader)  # Skip header
+            self.empire_names = [row[0] for row in reader]
+
     def update_sandbox(self):
         for empire in self.empires:
             empire.preform_actions()
             pass
         #empire.display_actions()
-        #scramble empires in empires list?
+        random.shuffle(self.empires) #scramble empires in empires list for "fairness"
         self.current_year += 1
             
     
