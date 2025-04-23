@@ -49,11 +49,12 @@ class Sandbox():
                     e = create_new_empire()
                     e.add_name(self.empire_names)
                     e.add_system(self.galaxy[index])
+                    print(f"{e.name} has been colonized in the {self.galaxy[index].name} system")
                     self.empires.append(e)
                     break
 
     def set_galaxy_size(self):
-        size = input("what size would you like the galaxy? (num of systems): ")
+        size = int(input("what size would you like the galaxy? (num of systems): "))
         if not isinstance(size, int):
             raise Exception("not a valid size. Must be a positive int (1, 2, 3, etc)")
         
@@ -108,9 +109,9 @@ class Sandbox():
             self.empire_names = [row[0] for row in reader]
 
     def update_sandbox(self):
-        for empire in self.empires:
-            empire.preform_actions()
-            empire.display_actions()
+        for e in self.empires:
+            e.perform_actions()
+            #self.empires[i].display_actions()
         random.shuffle(self.empires) #scramble empires in empires list for "fairness"
         self.current_year += 1
             

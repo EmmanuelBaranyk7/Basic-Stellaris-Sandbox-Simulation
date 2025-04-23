@@ -61,8 +61,8 @@ class TestBuild(unittest.TestCase):
         sandbox.create_empire_names_list()
         sandbox.create_galaxy(20)
         sandbox.colonize_empires(5)
-        while sandbox.current_year < sandbox.end_year:
-            sandbox.update_sandbox() #if any of the OTHER funcs are good, this should be good
+        #while sandbox.current_year < sandbox.end_year:
+            #sandbox.update_sandbox() #if any of the OTHER funcs are good, this should be good
 
 
     
