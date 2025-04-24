@@ -126,13 +126,11 @@ class Empire():
     def vassalize(self, neighbor): # note: vassals systems no longer count toward system_count, just score
         neighbor.overlord = self 
         self.fleet_cap += neighbor.fleet_cap
-        self.fleet_power += neighbor.fleet_power
-        #self.systems.extend(neighbor.systems)
-        #neighbor.neighbors.remove(self)
-        #self.neighbors.remove(neighbor)   Note, changed how neighbors are added, with add neighbor
-        #self.neighbors.extend(neighbor.neighbors)
+        self.fleet_power += neighbor.fleet_power  # add ships, but maybe its changed with recsoring?
         self.vassals.append(neighbor)
-        #print("attemping to display vassalize")
+        if neighbor in self.rivals:
+            self.rivals.remove(neighbor)
+            neighbor.rivals.remove(self)
         self.rescore()
         neighbor.rescore()
         self.display_actions(None, neighbor)

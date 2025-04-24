@@ -15,7 +15,7 @@ class TestEmpire(unittest.TestCase):
             (sys.econ_value, empire.economy),
             (2, empire.fleet_cap),
             (-1, empire.military_power) #ehhhh
-            #(sys.econ_value, empire.score)
+            #(sys.econ_value, empire.score) 
         ]
         self.assertListEqual(empire.systems, [sys])
         for actual, expected in test_cases:
@@ -47,11 +47,11 @@ class TestEmpire(unittest.TestCase):
         sys1.add_border(sys2)
         ep1.add_system(sys1)
         ep2.add_system(sys2)
-        ep1.neighbors.append(ep2)
-        ep2.neighbors.append(ep1)  #I might need to make a func for this
+        ep1.neighbors.add(ep2)
+        ep2.neighbors.add(ep1)  #I might need to make a func for this
         old_cap = ep1.fleet_cap
         ep1.vassalize(ep2)
-        self.assertEqual(ep1.fleet_cap, old_cap + ep2.fleet_cap)
+        self.assertEqual(ep1.fleet_cap, old_cap + ep2.fleet_cap)  
         self.assertIn(ep2, ep1.vassals)
         self.assertEqual(ep2.overlord, ep1)
     '''
